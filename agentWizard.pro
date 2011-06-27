@@ -27,18 +27,11 @@ RESOURCES += \
 
 PRE_TARGETDEPS += FusionInventory.o
 
-#Copy the .exe file into the build directory
-EmbedBlobExe_FILES = FusionInventory.exe
-EmbedBlobExe.input = EmbedBlobExe_FILES
-EmbedBlobExe.output = ${QMAKE_FILE_BASE}.exe
-unix:EmbedBlobExe.commands = cp -a ${QMAKE_FILE_NAME} ${QMAKE_FILE_OUT}
-win32:EmbedBlobExe.commands = copy ${QMAKE_FILE_NAME} ${QMAKE_FILE_OUT}
-
-#Create a .o binary file from the corresponding .S assembly
+#Create a .o binary file from the corresponding .S assembly and .exe binary
 EmbedBlobObj_FILES = FusionInventory.S
 EmbedBlobObj.input = EmbedBlobObj_FILES
-EmbedBlobObj.depends = ${QMAKE_FILE_BASE}.exe
 EmbedBlobObj.output = ${QMAKE_FILE_BASE}.o
-EmbedBlobObj.commands = as -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+unix:EmbedBlobObj.commands = cp -a ${QMAKE_FILE_IN_PATH}/${QMAKE_FILE_BASE}.exe . ; as -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+win32:EmbedBlobObj.commands = copy ${QMAKE_FILE_IN_PATH}/${QMAKE_FILE_BASE}.exe . & as -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
 
-QMAKE_EXTRA_COMPILERS += EmbedBlobExe EmbedBlobObj
+QMAKE_EXTRA_COMPILERS += EmbedBlobObj
