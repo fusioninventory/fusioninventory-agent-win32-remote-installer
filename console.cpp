@@ -150,7 +150,7 @@ Console::remoteExecError Console::startRemoteWin(QString curHost="") {
                  .arg(config->get("server"));
     processExec(tempWinexe, arguments);
 
-    checkConsoleOut();
+    checkConsoleOut(targetHost);
 
     QFile(tempWinexe).remove();
 
@@ -623,7 +623,7 @@ void Console::performRemoteWindowsInventoryOnIPv4Range(quint32 startIP, quint32 
     }
 }
 
-void Console::checkConsoleOut(QString curHost="") {
+void Console::checkConsoleOut(QString curHost) {
     /* Followong output means that the agent is not installed on the remote win host (for winexe)
        Error: error Creating process("C:\Program Files\FusionInventory-Agent\perl\bin\perl.exe" "C:\Program Files\FusionInventory-Agent\perl\bin\fusioninventory-agent" --debug  --tag=Testing-by_GUI --server http://ocs/ocsinventory) 3
        Or (for PsExec.exe)
