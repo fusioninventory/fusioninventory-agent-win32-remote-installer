@@ -557,8 +557,6 @@ QString Console::createInstWinFile() {
             .arg(qApp->applicationPid())
             .arg(rand() % 100) );
 
-    QMessageBox::information(this,"FileName", fileName);
-
     QFile instWinFile(fileName);
     QDataStream tempStream(&instWinFile);
     if ( instWinFile.open(QIODevice::WriteOnly) &&
