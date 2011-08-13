@@ -1,9 +1,36 @@
 = About =
 
-This tool helps you prepare your FusionInventory agent:
+This tool helps you install FusionInventory agent on Windows systems, remote or local:
  -set the server path with the optional credentials
  -configure the proxy settings
  -register the SSL certificat
+
+It accepts IP subnets and IP ranges as remote Windows target systems on which FusionInventory agent would be installed. Following forms of remote windows hosts are accepted:
+ - Single host name: test.mycompany.com
+ - Single host IP: 192.168.1.17
+ - IP list: 192.168.1.16, 192.168.1.17, 192.168.1.18
+ - IP range: 192.168.1.16 - 192.168.1.18
+ - Network specified by subnet: 192.168.1.0 / 255.255.255.0
+ - Network specified by CIDR: 192.168.1.0 / 24
+As result, the following is a valid value for "Host(s)" in "Remote host
+to be inventoried":
+test.mycompany.com, 10.10.2.26, 10.10.3.167, 192.168.1.0 /
+255.255.255.0, 192.168.3.0 / 24
+
+
+Or even you can leave it to the application to sweep your entire subnet
+by selecting "Try the entire network subnet". If you have these network
+interfaces:
+eth0	inet addr:10.10.1.37  Bcast:10.10.1.255  Mask:255.255.255.0
+eth0:1	inet addr:10.10.2.37  Bcast:10.10.2.255  Mask:255.255.255.0
+eth1	inet addr:10.10.3.37  Bcast:10.10.3.255  Mask:255.255.255.0
+lo 	inet addr:127.0.0.1  Mask:255.0.0.0
+
+It would be the same as specifying the following as "Host(s)":
+10.10.1.37/24, 10.10.2.37/24, 10.10.3.37/24,
+The trailing "," would be ignored.
+
+
 
 = Build =
 
