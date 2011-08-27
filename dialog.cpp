@@ -66,7 +66,9 @@ bool Dialog::loadConfig(Config * config) {
         ui->pushButton->setDisabled(true);
 
         QMessageBox msgBox;
-        msgBox.setText(tr("The configuration changes won't be saved. Do you have the required privilege?"));
+        msgBox.setText(tr("The configuration changes won't be saved.\n"
+                          "Please either grant write privilege on %1\n"
+                          " or use another config file").arg(config->settings->fileName()));
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.exec();
     }
