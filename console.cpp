@@ -579,21 +579,30 @@ QString Console::createInstWinFile() {
 }
 
 void Console::performRemoteWindowsInventory(QString curHost) {
+    static bool askEachInstall = true;
     if(startRemoteWin(curHost) == NotInstalled) {
-        if(QMessageBox::Yes == QMessageBox::question(this,
-                                                     tr("Agent execution failed"),
-                                                     tr("Agent execution failed. Would you like to try to install/reinstall the agent?"),
-                                                     QMessageBox::Yes, QMessageBox::Ignore)) {
-            if(instRemoteWin(curHost) == NoError) {
+        if(askEachInstall) {
+            QMessageBox::StandardButton tempAnswer = QMessageBox::question(this,
+                                                                           tr("Agent execution failed"),
+                                                                           tr("Agent execution failed. Would you like to try to install/reinstall the agent?"),
+                                                                           QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No);
+            if (tempAnswer == QMessageBox::YesToAll) {
+                askEachInstall = false;
+            } else if (tempAnswer == QMessageBox::No) {
+                return;
+            }
+        }
+        if(instRemoteWin(curHost) == NoError) {
+            if(askEachInstall) {
                 QMessageBox::information(this, tr("Installation completed"),
                                          tr("Installation completed successfuly. Retrying agent execution..."),
                                          QMessageBox::Ok);
-                startRemoteWin(curHost);
-            } else {
-                QMessageBox::critical(this, tr("Installation failed"),
-                                      tr("Installation failed"),
-                                      QMessageBox::Ok);
             }
+            startRemoteWin(curHost);
+        } else if(askEachInstall) {
+            QMessageBox::critical(this, tr("Installation failed"),
+                                  tr("Installation failed"),
+                                  QMessageBox::Ok);
         }
     }
 }
